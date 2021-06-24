@@ -86,7 +86,7 @@ public class Fragment_Current_Order extends Fragment {
         getOrders();
     }
 
-    private void getOrders()
+    public void getOrders()
     {
         try {
 
@@ -202,6 +202,9 @@ public class Fragment_Current_Order extends Fragment {
                             if (response.body() != null && response.body().getStatus() == 200) {
                                 list.remove(pos);
                                 adapter.notifyItemRemoved(pos);
+                                activity.displayFragmentPreviousOrder();
+                                activity.updateBottonNav(R.id.previous);
+
                                 if (list.size()>0){
                                     binding.tvNoData.setVisibility(View.GONE);
                                 }else {
@@ -241,4 +244,63 @@ public class Fragment_Current_Order extends Fragment {
                     }
                 });
     }
+
+    public void acceptRefuseOrder(int pos , CurrentOrderModel model, String status){
+        ProgressDialog dialog = Common.createProgressDialog(activity, getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        Api.getService(Tags.base_url)
+                .acceptRefuseOrder(userModel.getData().getId(),model.getId(),status)
+                .enqueue(new Callback<StatusResponse>() {
+                    @Override
+                    public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful()) {
+                            if (response.body() != null && response.body().getStatus() == 200) {
+                                list.remove(pos);
+                                adapter.notifyItemRemoved(pos);
+                                activity.displayFragmentMain();
+                                activity.updateBottonNav(R.id.home);
+
+                                if (list.size()>0){
+                                    binding.tvNoData.setVisibility(View.GONE);
+                                }else {
+                                    binding.tvNoData.setVisibility(View.VISIBLE);
+
+                                }
+                            }
+
+                        } else {
+                            dialog.dismiss();
+                            try {
+                                Log.e("error", response.code() + "__" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (response.code() == 500) {
+                            } else {
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<StatusResponse> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            if (t.getMessage() != null) {
+                                Log.e("error", t.getMessage() + "__");
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                } else {
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
+    }
+
 }

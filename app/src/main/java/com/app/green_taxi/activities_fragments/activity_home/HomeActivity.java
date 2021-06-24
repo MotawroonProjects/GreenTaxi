@@ -37,7 +37,11 @@ import com.app.green_taxi.tags.Tags;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.installations.FirebaseInstallations;
+import com.google.firebase.installations.InstallationTokenResult;
+//import com.google.firebase.iid.FirebaseInstanceId;
 
 
 import org.greenrobot.eventbus.EventBus;
@@ -178,6 +182,7 @@ public class HomeActivity extends AppCompatActivity {
 
             if (fragment_current_order.isAdded()) {
                 fragmentManager.beginTransaction().show(fragment_current_order).commit();
+                fragment_current_order.getOrders();
 
             } else {
                 fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_current_order, "fragment_current_order").commit();
@@ -205,6 +210,7 @@ public class HomeActivity extends AppCompatActivity {
 
             if (fragment_previous_order.isAdded()) {
                 fragmentManager.beginTransaction().show(fragment_previous_order).commit();
+                fragment_previous_order.getOrders();
 
             } else {
                 fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_previous_order, "fragment_previous_order").commit();
@@ -229,6 +235,11 @@ public class HomeActivity extends AppCompatActivity {
                     startActivity(intent);
                 }, 500);
 
+
+    }
+
+    public void updateBottonNav(int id){
+        binding.bottomNavView.setSelectedItemId(id);
 
     }
 
@@ -317,12 +328,13 @@ public class HomeActivity extends AppCompatActivity {
 
 
     private void updateFirebaseToken() {
-        FirebaseInstanceId.getInstance()
-                .getInstanceId().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                String token = task.getResult().getToken();
-
-                try {
+        FirebaseInstallations.getInstance().getToken(true).addOnCompleteListener(new OnCompleteListener<InstallationTokenResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstallationTokenResult> task) {
+                // Log.e("Ddldld",task.getException().toString());
+                if (task.isSuccessful()) {
+                    String token = task.getResult().getToken();
+                    Log.e("ldldldl", token);
                     Api.getService(Tags.base_url)
                             .updateFirebaseToken(token, userModel.getData().getId(), "android")
                             .enqueue(new Callback<StatusResponse>() {
@@ -359,9 +371,6 @@ public class HomeActivity extends AppCompatActivity {
                                     }
                                 }
                             });
-                } catch (Exception e) {
-
-
                 }
 
             }

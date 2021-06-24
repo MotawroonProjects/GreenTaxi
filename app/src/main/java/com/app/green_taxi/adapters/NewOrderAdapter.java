@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.green_taxi.R;
+import com.app.green_taxi.activities_fragments.activity_home.HomeActivity;
 import com.app.green_taxi.activities_fragments.activity_home.fragments.Fragment_Home;
 import com.app.green_taxi.databinding.NewOrderRowBinding;
 import com.app.green_taxi.models.OrderDataModel;
@@ -23,6 +24,7 @@ public class NewOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Context context;
     private LayoutInflater inflater;
     private Fragment_Home fragment_home;
+    private HomeActivity activity;
 
     public NewOrderAdapter(List<OrderDataModel.Data> list, Context context, Fragment_Home fragment_home) {
         this.list = list;
@@ -44,8 +46,10 @@ public class NewOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (holder instanceof MyHolder) {
             MyHolder myHolder = (MyHolder) holder;
             myHolder.binding.setModel(list.get(position));
+            activity=new HomeActivity();
             myHolder.binding.llAccept.setOnClickListener(v -> {
                 fragment_home.acceptRefuseOrder(myHolder.getAdapterPosition(),list.get(myHolder.getAdapterPosition()), "accepted");
+
             });
 
             myHolder.binding.imageDelete.setOnClickListener(v -> {

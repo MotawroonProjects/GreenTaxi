@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.green_taxi.R;
+import com.app.green_taxi.activities_fragments.activity_home.HomeActivity;
 import com.app.green_taxi.activities_fragments.activity_home.fragments.Fragment_Current_Order;
 import com.app.green_taxi.activities_fragments.activity_home.fragments.Fragment_Home;
 import com.app.green_taxi.databinding.CurrentOrderRowBinding;
@@ -32,6 +33,7 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private Context context;
     private LayoutInflater inflater;
     private Fragment_Current_Order fragment_current_order;
+    private HomeActivity activity;
 
     public CurrentOrderAdapter(List<CurrentOrderModel> list, Context context, Fragment_Current_Order fragment_current_order) {
         this.list = list;
@@ -55,6 +57,7 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             myHolder.binding.setModel(list.get(position));
             myHolder.initMapView();
 
+            activity=new HomeActivity();
             myHolder.binding.imageCall.setOnClickListener(v -> {
                 fragment_current_order.call(list.get(myHolder.getAdapterPosition()));
             });
@@ -69,6 +72,11 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             myHolder.binding.llDone.setOnClickListener(v -> {
                 fragment_current_order.finishOrder(list.get(myHolder.getAdapterPosition()),myHolder.getAdapterPosition());
+            });
+
+
+            myHolder.binding.llCancel.setOnClickListener(v -> {
+                fragment_current_order.acceptRefuseOrder(myHolder.getAdapterPosition(),list.get(myHolder.getAdapterPosition()), "refused");
             });
 
         }
@@ -90,8 +98,6 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             super(binding.getRoot());
             this.binding = binding;
             this.context = context;
-
-
 
         }
         private void initMapView(){
