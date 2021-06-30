@@ -166,6 +166,8 @@ public class Fragment_Home extends Fragment {
                             if (response.body() != null && response.body().getStatus() == 200) {
                                 list.remove(pos);
                                 adapter.notifyItemRemoved(pos);
+                                activity.displayFragmentCurrentOrder();
+                                activity.updateBottonNav(R.id.current);
                                 if (list.size()>0){
                                     binding.tvNoData.setVisibility(View.GONE);
                                 }else {

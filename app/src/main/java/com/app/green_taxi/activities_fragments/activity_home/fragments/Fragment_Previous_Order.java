@@ -81,12 +81,12 @@ public class Fragment_Previous_Order extends Fragment {
 
 
 
-    private void getOrders()
+    public void getOrders()
     {
         try {
 
             Api.getService(Tags.base_url)
-                    .getCurrentPreviousOrders(userModel.getData().getId(),"current","desc")
+                    .getCurrentPreviousOrders(userModel.getData().getId(),"old","desc")
                     .enqueue(new Callback<CurrentOrderDataModel>() {
                         @Override
                         public void onResponse(Call<CurrentOrderDataModel> call, Response<CurrentOrderDataModel> response) {
