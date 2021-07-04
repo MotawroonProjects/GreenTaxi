@@ -28,6 +28,7 @@ import com.app.green_taxi.databinding.ActivityHomeBinding;
 import com.app.green_taxi.language.Language;
 import com.app.green_taxi.location_service.LocationService;
 import com.app.green_taxi.models.LocationModel;
+import com.app.green_taxi.models.NotFireModel;
 import com.app.green_taxi.models.StatusResponse;
 import com.app.green_taxi.models.UserModel;
 import com.app.green_taxi.preferences.Preferences;
@@ -321,6 +322,21 @@ public class HomeActivity extends AppCompatActivity {
             binding.flLocation.setVisibility(View.GONE);
             displayFragmentMain();
             isFirstTime = false;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void dataListener(NotFireModel model){
+        if (fragment_home!=null&&fragment_home.isAdded()){
+            fragment_home.getOrders();
+        }
+
+        if (fragment_current_order!=null&&fragment_current_order.isAdded()){
+            fragment_current_order.getOrders();
+        }
+
+        if (fragment_previous_order!=null&&fragment_previous_order.isAdded()){
+            fragment_previous_order.getOrders();
         }
     }
 

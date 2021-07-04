@@ -97,8 +97,8 @@ public class VerificationCodeActivity extends AppCompatActivity {
             }
 
         });
-        login();
-        //sendSmsCode();
+        //login();
+        sendSmsCode();
     }
 
     private void sendSmsCode() {
@@ -239,7 +239,6 @@ public class VerificationCodeActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
 
     @Override
     protected void onDestroy() {

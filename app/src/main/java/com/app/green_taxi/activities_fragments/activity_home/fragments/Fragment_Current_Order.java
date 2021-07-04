@@ -202,7 +202,7 @@ public class Fragment_Current_Order extends Fragment {
                             if (response.body() != null && response.body().getStatus() == 200) {
                                 list.remove(pos);
                                 adapter.notifyItemRemoved(pos);
-                                activity.displayFragmentPreviousOrder();
+                                //activity.displayFragmentPreviousOrder();
                                 activity.updateBottonNav(R.id.previous);
 
                                 if (list.size()>0){
@@ -266,6 +266,8 @@ public class Fragment_Current_Order extends Fragment {
                                 if (list.size()>0){
                                     binding.tvNoData.setVisibility(View.GONE);
                                 }else {
+                                    adapter.notifyDataSetChanged();
+
                                     binding.tvNoData.setVisibility(View.VISIBLE);
 
                                 }

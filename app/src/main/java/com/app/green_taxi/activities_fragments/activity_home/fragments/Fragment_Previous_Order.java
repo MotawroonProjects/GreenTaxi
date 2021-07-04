@@ -94,10 +94,13 @@ public class Fragment_Previous_Order extends Fragment {
                             binding.swipeRefresh.setRefreshing(false);
                             if (response.isSuccessful() && response.body() != null ) {
                                 if (response.body().getStatus()==200){
+                                    list.clear();
                                     if (response.body().getData().size()>0){
                                         updateData(response.body().getData());
                                         binding.tvNoData.setVisibility(View.GONE);
                                     }else {
+                                        adapter.notifyDataSetChanged();
+
                                         binding.tvNoData.setVisibility(View.VISIBLE);
 
                                     }
@@ -130,7 +133,7 @@ public class Fragment_Previous_Order extends Fragment {
 
     private void updateData(List<CurrentOrderModel> data)
     {
-        list.clear();
+
         adapter.notifyDataSetChanged();
         if (activity.locationModel!=null){
             for (CurrentOrderModel model : data){

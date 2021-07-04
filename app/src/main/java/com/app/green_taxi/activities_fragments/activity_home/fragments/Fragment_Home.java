@@ -81,7 +81,7 @@ public class Fragment_Home extends Fragment {
         getOrders();
     }
 
-    private void getOrders() {
+    public void getOrders() {
         try {
 
             Api.getService(Tags.base_url)
@@ -93,10 +93,12 @@ public class Fragment_Home extends Fragment {
                             binding.swipeRefresh.setRefreshing(false);
                             if (response.isSuccessful() && response.body() != null ) {
                                 if (response.body().getStatus()==200){
+                                    list.clear();
                                     if (response.body().getData().size()>0){
                                         updateData(response.body().getData());
                                         binding.tvNoData.setVisibility(View.GONE);
                                     }else {
+                                        adapter.notifyDataSetChanged();
                                         binding.tvNoData.setVisibility(View.VISIBLE);
 
                                     }
@@ -166,7 +168,7 @@ public class Fragment_Home extends Fragment {
                             if (response.body() != null && response.body().getStatus() == 200) {
                                 list.remove(pos);
                                 adapter.notifyItemRemoved(pos);
-                                activity.displayFragmentCurrentOrder();
+                                //activity.displayFragmentCurrentOrder();
                                 activity.updateBottonNav(R.id.current);
                                 if (list.size()>0){
                                     binding.tvNoData.setVisibility(View.GONE);
