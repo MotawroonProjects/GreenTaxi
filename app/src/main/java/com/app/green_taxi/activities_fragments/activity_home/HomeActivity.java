@@ -95,8 +95,20 @@ public class HomeActivity extends AppCompatActivity {
         Paper.init(this);
         lang = Paper.book().read("lang", "ar");
         binding.setLang(lang);
+        if (lang.equals("ar")){
+            binding.tvLang.setText("العربية");
+        }else {
+            binding.tvLang.setText("EN");
 
+        }
 
+        binding.tvLang.setOnClickListener(v -> {
+            if (lang.equals("ar")){
+                refreshActivity("en");
+            }else {
+                refreshActivity("ar");
+            }
+        });
 
 
         binding.bottomNavView.setOnNavigationItemSelectedListener(item -> {
