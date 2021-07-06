@@ -85,7 +85,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     private void initLocationRequest(){
         locationRequest = LocationRequest.create();
-        locationRequest.setInterval(5*60000);
+        locationRequest.setInterval(2*60000);
         locationRequest.setFastestInterval(60000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
@@ -174,11 +174,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (googleApiClient!=null&&locationCallback!=null){
-            LocationServices.getFusedLocationProviderClient(this)
-                    .removeLocationUpdates(locationCallback);
-            googleApiClient.disconnect();
-            googleApiClient = null;
-        }
+
     }
 }

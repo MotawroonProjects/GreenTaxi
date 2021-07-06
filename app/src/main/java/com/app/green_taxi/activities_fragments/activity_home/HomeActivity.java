@@ -283,8 +283,8 @@ public class HomeActivity extends AppCompatActivity {
             EventBus.getDefault().unregister(this);
         }
         try {
-            Intent intent = new Intent(this,LocationService.class);
-            stopService(intent);
+            /*Intent intent = new Intent(this,LocationService.class);
+            stopService(intent);*/
         }catch (Exception e){
 
         }
@@ -331,9 +331,15 @@ public class HomeActivity extends AppCompatActivity {
         this.locationModel = locationModel;
         isLocationSuccess = true;
         if (isFirstTime){
-            binding.flLocation.setVisibility(View.GONE);
-            displayFragmentMain();
-            isFirstTime = false;
+            try {
+                binding.flLocation.setVisibility(View.GONE);
+                displayFragmentMain();
+                isFirstTime = false;
+
+            }catch (Exception e){
+
+            }
+
         }
     }
 
