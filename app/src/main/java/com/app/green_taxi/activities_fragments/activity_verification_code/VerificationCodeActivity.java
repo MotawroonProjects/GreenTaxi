@@ -25,6 +25,7 @@ import com.app.green_taxi.tags.Tags;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.text.SimpleDateFormat;
@@ -48,6 +49,7 @@ public class VerificationCodeActivity extends AppCompatActivity {
     private String smsCode;
     private Preferences preferences;
     private boolean canSend = false;
+    private PhoneAuthProvider.ForceResendingToken forceResendingToken;
 
 
     @Override
@@ -117,6 +119,7 @@ public class VerificationCodeActivity extends AppCompatActivity {
             public void onCodeSent(@NonNull String verification_id, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(verification_id, forceResendingToken);
                 VerificationCodeActivity.this.verificationId = verification_id;
+                VerificationCodeActivity.this.forceResendingToken = forceResendingToken;
             }
 
 
@@ -130,16 +133,38 @@ public class VerificationCodeActivity extends AppCompatActivity {
 
                 }
             }
-        };
-        PhoneAuthProvider.getInstance()
-                .verifyPhoneNumber(
-                        phone_code + phone,
-                        120,
-                        TimeUnit.SECONDS,
-                        this,
-                        mCallBack
 
-                );
+            @Override
+            public void onCodeAutoRetrievalTimeOut(@NonNull String s) {
+                super.onCodeAutoRetrievalTimeOut(s);
+                login();
+            }
+        };
+
+        PhoneAuthOptions options;
+        if (forceResendingToken==null){
+            options = PhoneAuthOptions.newBuilder()
+                    .setPhoneNumber(phone_code + phone)
+                    .setTimeout(120L, TimeUnit.SECONDS)
+                    .setActivity(this)
+                    .setCallbacks(mCallBack)
+                    .build();
+
+        }else{
+            options = PhoneAuthOptions.newBuilder()
+                    .setPhoneNumber(phone_code + phone)
+                    .setTimeout(120L, TimeUnit.SECONDS)
+                    .setActivity(this)
+                    .setForceResendingToken(forceResendingToken)
+                    .setCallbacks(mCallBack)
+                    .build();
+
+        }
+        PhoneAuthProvider.verifyPhoneNumber(options);
+
+
+
+
 
 
 
